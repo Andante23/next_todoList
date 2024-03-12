@@ -1,0 +1,14 @@
+{
+  "todos": [
+    {
+      "id": 0,
+      "title": "2024년 취업하기",
+      "content": "아자아자파이팅",
+      "isDone": false
+    }
+  ],
+  "companinfo": {
+    "name": "비버라폴리카",
+    "description": "금용권을 선도하는 기업 비버라폴리카"
+  }
+}
