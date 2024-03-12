@@ -32,14 +32,51 @@ export async function POST(request: Request) {
   });
 }
 
-// export async function DELETE(request: Request) {
-//   const url = new URL(request.url);
-//   const id = url.pathname.split("/").pop();
+// 데이터 수정하기
+export async function PATCH(request: Request) {
+  const { isDone } = await request.json();
 
-//   await fetch(`http://localhost:4000/todos${id}`, {
-//     method: "DELETE",
-//     headers: {
-//       "content-type": "application/json",
-//     },
-//   });
-// }
+  // 제가 요청한 URL 생성
+  const url = new URL(request.url);
+
+  // 컴퓨터가 요청 URL을 찾아요 그리고 거기에서 id를 얻어옴
+  const id = url.searchParams.get("id");
+
+  const response = await fetch(`https://localhost:4000/todos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify({ isDone: !isDone }),
+  });
+
+  const todo = await response.json();
+
+  return Response.json({
+    todo,
+  });
+}
+
+// 데이터 삭제하기
+export async function DELETE(request: Request) {
+  // 제가 요청한 URL 생성
+  const url = new URL(request.url);
+
+  // 컴퓨터가 요청 URL을 찾아요 그리고 거기에서 id를 얻어옴
+  const id = url.searchParams.get("id");
+
+  const response = await fetch(`http://localhost:4000/todos/${id}`, {
+    method: "DELETE",
+  });
+
+  if (response.ok) {
+    return Response.json({
+      message: "Todo deleted successfully",
+    });
+  } else {
+    return new Response("Failed to delete Todo", {
+      status: 500,
+    });
+  }
+}

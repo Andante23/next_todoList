@@ -40,24 +40,14 @@ function TodoCsrPage() {
     },
   });
 
-  // const patchTodoMutation = useMutation({
-  //   mutationFn: async ({ id, isDone }: Todos) => {
-  //     const response = await fetch(`http://localhost:3000/api/todos/${id}`, {
-  //       method: "PATCH",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ isDone: !isDone }),
-  //     });
-  //     const todo = await response.json();
-  //     return todo;
-  //   },
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries({
-  //       queryKey: [`todos`],
-  //     });
-  //   },
-  // });
+  // 데이터 삭제하기
+  const deleteTodoMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await fetch(`http://localhost:3000/api/todos?id=${id}`, {
+        method: "DELETE",
+      });
+    },
+  });
 
   if (isLoading) {
     return <div>로딩중</div>;
@@ -66,26 +56,6 @@ function TodoCsrPage() {
   if (isError) {
     return <div>에러</div>;
   }
-
-  // const changeTodoStateFalseButtonClick = (id: string, isDone?: Boolean) => {
-  //   const isChange: boolean = window.confirm("변경하겠습니까?");
-
-  //   if (isChange) {
-  //     patchTodoMutation.mutate({ id, isDone: false, title, content });
-  //   } else {
-  //     return;
-  //   }
-  // };
-
-  // const changeTodoStateTrueButtonClick = (id: string, isDone?: Boolean) => {
-  //   const isChange: boolean = window.confirm("변경하겠습니까?");
-
-  //   if (isChange) {
-  //     patchTodoMutation.mutate({ id, isDone: true, title, content });
-  //   } else {
-  //     return;
-  //   }
-  // };
 
   return (
     <>
@@ -150,23 +120,17 @@ function TodoCsrPage() {
               <p>{data.content}</p>
               <button
                 onClick={() => {
-                  // deleteTodoMutation.mutate(data.id);
+                  deleteTodoMutation.mutate(data.id);
                 }}
               >
                 delete
               </button>
-              <button
-              // onClick={() => {
-              //   changeTodoStateFalseButtonClick(data.id);
-              // }}
-              >
-                변화
-              </button>
+              <button>변화</button>
             </div>
           ))}
       </section>
 
-      {/* <section>
+      <section>
         <h1>
           <b>False</b>
         </h1>
@@ -183,18 +147,10 @@ function TodoCsrPage() {
               >
                 delete
               </button>
-              <button
-                onClick={() => {
-                  // changeTodoStateTrueButtonClick(data.id);
-                }}
-              >
-                변화
-              </button>
+              <button>변화</button>
             </div>
           ))}
-      </section> */}
-
-      {}
+      </section>
     </>
   );
 }
