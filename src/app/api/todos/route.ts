@@ -1,5 +1,5 @@
 export async function GET(request: Request) {
-  const response = await fetch(`${process.env.TODO_API_SERVER_URL}`);
+  const response = await fetch(`http://localhost:4000/todos`);
   const todos = await response.json();
 
   if (!todos) {
@@ -9,20 +9,14 @@ export async function GET(request: Request) {
   }
 
   return Response.json({
-    todos: [
-      ...todos,
-      {
-        test: "test",
-      },
-    ],
+    todos: [...todos],
   });
 }
 
 export async function POST(request: Request) {
-
   const { title, content } = await request.json();
 
-  const response = await fetch(`${process.env.TODO_API_SERVER_URL}`, {
+  const response = await fetch(`http://localhost:4000/todos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,3 +31,15 @@ export async function POST(request: Request) {
     todo,
   });
 }
+
+// export async function DELETE(request: Request) {
+//   const url = new URL(request.url);
+//   const id = url.pathname.split("/").pop();
+
+//   await fetch(`http://localhost:4000/todos${id}`, {
+//     method: "DELETE",
+//     headers: {
+//       "content-type": "application/json",
+//     },
+//   });
+// }
