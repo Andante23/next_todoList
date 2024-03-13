@@ -1,5 +1,5 @@
 export async function GET(request: Request) {
-  const response = await fetch(`http://localhost:4000/todos`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_TODO_URL}`);
   const todos = await response.json();
 
   if (!todos) {
@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const { title, content } = await request.json();
 
-  const response = await fetch(`http://localhost:4000/todos`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_TODO_URL}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export async function PATCH(request: Request) {
   const id = url.searchParams.get("id");
   console.log("id", id);
 
-  const response = await fetch(`http://localhost:4000/todos/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_TODO_URL}/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -57,7 +57,6 @@ export async function PATCH(request: Request) {
   return Response.json(data);
 }
 
-// 데이터 삭제하기
 export async function DELETE(request: Request) {
   // 제가 요청한 URL 생성
   const url = new URL(request.url);
@@ -65,7 +64,7 @@ export async function DELETE(request: Request) {
   // 컴퓨터가 요청 URL을 찾아요 그리고 거기에서 id를 얻어옴
   const id = url.searchParams.get("id");
 
-  const response = await fetch(`http://localhost:4000/todos/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_TODO_URL}/${id}`, {
     method: "DELETE",
   });
 

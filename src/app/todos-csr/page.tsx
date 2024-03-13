@@ -1,35 +1,30 @@
 "use client";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Todos } from "../types/todo";
 import useMutate from "../hook/useMutate";
 
 function TodoCsrPage() {
   const queryClient = useQueryClient();
-  // 사용자 입력값을 받는 state
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-
   const { addTodoMutation, deleteTodoMutation, patchTodoMutation } =
     useMutate();
 
-  // 데이터 받아오기
   const {
     data: todos,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["todos"],
+    queryKey: [`${process.env.NEXT_PUBLIC_QUERY_KEY}`],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/api/todos`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_TODO_URL}`);
 
       const { todos } = await response.json();
 
       return todos;
     },
   });
-
-  console.log(todos);
 
   if (isLoading) {
     return <div>로딩중</div>;
@@ -39,12 +34,13 @@ function TodoCsrPage() {
     return <div>에러</div>;
   }
 
+  console.log(todos);
+
   return (
     <>
-      {/* todo 데이터를 추가하는 로직 */}
       <section>
-        <h2>새로운 투두 추가하기</h2>
         <form
+          className="flex-col items-center justify-center"
           onSubmit={(e) => {
             e.preventDefault();
             addTodoMutation.mutate(
@@ -60,32 +56,48 @@ function TodoCsrPage() {
                   setContent("");
 
                   queryClient.invalidateQueries({
-                    queryKey: ["todos"],
+                    queryKey: [`todos`],
                   });
                 },
               }
             );
           }}
         >
-          <div>
-            <label htmlFor="title">Title</label>
-            <input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
+          <div className="flex items-center flex-col justify-center ">
+            <div className="m-5 ">
+              <label htmlFor="title" className="pr-4 font-bold">
+                Title
+              </label>
+              <br></br>
+              <input
+                className="w-100  border-2 "
+                id="title"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+
+            <div className="m-5">
+              <label htmlFor="contents" className="pr-4 font-bold">
+                Contents
+              </label>
+              <br></br>
+              <textarea
+                className="w-190 border-2  "
+                id="contents"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="border-2 m-5 p-2 rounded-md font-bold "
+            >
+              Add Todo
+            </button>
           </div>
-          <div>
-            <label htmlFor="contents">Contents</label>
-            <input
-              id="contents"
-              type="text"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div>
-          <button type="submit">Add Todo</button>
         </form>
       </section>
 
@@ -97,10 +109,13 @@ function TodoCsrPage() {
         {todos
           .filter((todo: Todos) => !todo.isDone)
           .map((data: Todos) => (
-            <div key={data.id}>
-              <p>{data.title}</p>
-              <p>{data.content}</p>
+            <div key={data.id} className="border-black border-2 rounded m-5 ">
+              <div className="border-2 m-5">
+                <p>{data.title}</p>
+                <p>{data.content}</p>
+              </div>
               <button
+                className="border-2 m-2 rounded-md p-1 font-bold"
                 onClick={() => {
                   deleteTodoMutation.mutate(data.id);
                 }}
@@ -108,6 +123,7 @@ function TodoCsrPage() {
                 delete
               </button>
               <button
+                className="border-2 m-2 rounded-md p-1 font-bold"
                 onClick={() => {
                   patchTodoMutation.mutate({
                     id: data.id,
@@ -117,7 +133,7 @@ function TodoCsrPage() {
                   });
                 }}
               >
-                변화
+                start
               </button>
             </div>
           ))}
@@ -130,10 +146,14 @@ function TodoCsrPage() {
         {todos
           .filter((todo: Todos) => todo.isDone)
           .map((data: Todos) => (
-            <div key={data.id}>
-              <p>{data.title}</p>
-              <p>{data.content}</p>
+            <div key={data.id} className="border-black border-2 rounded m-5 ">
+              <div className="border-2 m-5">
+                <p>{data.title}</p>
+                <p>{data.content}</p>
+              </div>
+
               <button
+                className="border-2 m-2 rounded-md p-1 font-bold"
                 onClick={() => {
                   deleteTodoMutation.mutate(data.id);
                 }}
@@ -141,6 +161,7 @@ function TodoCsrPage() {
                 delete
               </button>
               <button
+                className="border-2 m-2 rounded-md p-1 font-bold "
                 onClick={() => {
                   patchTodoMutation.mutate({
                     id: data.id,
@@ -150,7 +171,7 @@ function TodoCsrPage() {
                   });
                 }}
               >
-                변화
+                end
               </button>
             </div>
           ))}

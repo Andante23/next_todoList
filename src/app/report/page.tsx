@@ -1,14 +1,20 @@
 async function ReportPage() {
-  const response = await fetch(`http://localhost:4000/todos`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_TODO_URL}`, {
     cache: "no-cache",
   });
+
+  console.log(response);
+
   const todos = await response.json();
+  console.log(todos);
 
   return (
     <>
-      <div>
-        <p>현재까지 {todos.length}개의 todolist가 등록되었습니다.</p>
-      </div>
+      <article className="p-10 rounded  border-2  m-5 text-3xl">
+        <p className="p-10 rounded border-2 m-5 text-3xl">
+          현재 할일 목록 : <b>{todos.length}</b>개
+        </p>
+      </article>
     </>
   );
 }
