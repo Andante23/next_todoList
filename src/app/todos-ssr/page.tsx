@@ -1,9 +1,7 @@
 import { Todos } from "../types/todo";
 
 async function TodoSsrPage() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_TODO_URL}`, {
-    cache: "no-cache",
-  });
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_TODO_URL}`);
 
   const { todos } = await response.json();
 

@@ -3,13 +3,15 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Todos } from "../types/todo";
 import useMutate from "../hook/useMutate";
-
+import { useRouter } from "next/navigation";
 function TodoCsrPage() {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const { addTodoMutation, deleteTodoMutation, patchTodoMutation } =
     useMutate();
+
+  const route = useRouter();
 
   const {
     data: todos,
@@ -26,6 +28,10 @@ function TodoCsrPage() {
     },
   });
 
+  const goToStatisticButton = () => {
+    route.push("/report");
+  };
+
   if (isLoading) {
     return <div>로딩중</div>;
   }
@@ -34,10 +40,15 @@ function TodoCsrPage() {
     return <div>에러</div>;
   }
 
-  console.log(todos);
-
   return (
     <>
+      <button
+        onClick={goToStatisticButton}
+        className="rounded border-2 m-5 p-2 font-bold"
+      >
+        통계바로가기
+      </button>
+
       <section>
         <form
           className="flex-col items-center justify-center"
