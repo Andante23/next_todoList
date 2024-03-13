@@ -1,24 +1,5 @@
 {
-  "todos": [
-    {
-      "id": "3250",
-      "title": "ㄹㅇㅎㅇㄹㅇㅀㄹㅇㅎ",
-      "content": "ㄹㅇㅎㅀㅇㄹㅇ",
-      "isDone": false
-    },
-    {
-      "id": "db01",
-      "title": "ㅇㅇㅇ",
-      "content": "ㅇㅇㅇㅇ",
-      "isDone": true
-    },
-    {
-      "id": "62b3",
-      "title": "fff",
-      "content": "fff\n\n",
-      "isDone": false
-    }
-  ],
+  "todos": [],
   "companyInfo": {
     "name": "TalkSolve",
     "description": "문제는 소통으로 풀자"

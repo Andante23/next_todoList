@@ -6,11 +6,8 @@ async function ReportPage() {
       revalidate: 5,
     },
   });
-
   const todos = await response.json();
-
   const todoFalse = todos.filter((data: Todos) => data.isDone === false).length;
-
   const todoTrue = todos.filter((data: Todos) => data.isDone === true).length;
 
   return (

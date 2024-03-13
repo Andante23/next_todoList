@@ -55,7 +55,12 @@ function useMutate() {
     },
   });
 
-  return { addTodoMutation, deleteTodoMutation, patchTodoMutation };
+  return {
+    queryClient,
+    addTodoMutation,
+    deleteTodoMutation,
+    patchTodoMutation,
+  };
 }
 
 export default useMutate;
