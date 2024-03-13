@@ -1,8 +1,8 @@
 async function ReportPage() {
-  const response = await fetch(`http://localhost:3000/api/todos`, {
-    cache: "force-cache",
+  const response = await fetch(`http://localhost:4000/todos`, {
+    cache: "no-cache",
   });
-  const { todos } = await response.json();
+  const todos = await response.json();
 
   return (
     <>

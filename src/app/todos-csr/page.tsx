@@ -1,13 +1,17 @@
 "use client";
-import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Todos } from "../types/todo";
+import useMutate from "../hook/useMutate";
 
 function TodoCsrPage() {
   const queryClient = useQueryClient();
   // 사용자 입력값을 받는 state
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  const { addTodoMutation, deleteTodoMutation, patchTodoMutation } =
+    useMutate();
 
   // 데이터 받아오기
   const {
@@ -17,37 +21,15 @@ function TodoCsrPage() {
   } = useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:3000/api/todos`);
+      const response = await fetch(`http://localhost:3000/api/todos`);
 
-      const todos = await res.json();
+      const { todos } = await response.json();
 
-      return todos.todos;
+      return todos;
     },
   });
 
-  // 데이터 추가하기
-  const newTodoMutation = useMutation({
-    mutationFn: async (newTodo: Todos) => {
-      const response = await fetch(`http://localhost:3000/api/todos`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTodo),
-      });
-      const todo = await response.json();
-      return todo;
-    },
-  });
-
-  // 데이터 삭제하기
-  const deleteTodoMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await fetch(`http://localhost:3000/api/todos?id=${id}`, {
-        method: "DELETE",
-      });
-    },
-  });
+  console.log(todos);
 
   if (isLoading) {
     return <div>로딩중</div>;
@@ -65,7 +47,7 @@ function TodoCsrPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            newTodoMutation.mutate(
+            addTodoMutation.mutate(
               {
                 title,
                 content,
@@ -125,7 +107,18 @@ function TodoCsrPage() {
               >
                 delete
               </button>
-              <button>변화</button>
+              <button
+                onClick={() => {
+                  patchTodoMutation.mutate({
+                    id: data.id,
+                    isDone: true,
+                    title,
+                    content,
+                  });
+                }}
+              >
+                변화
+              </button>
             </div>
           ))}
       </section>
@@ -147,7 +140,18 @@ function TodoCsrPage() {
               >
                 delete
               </button>
-              <button>변화</button>
+              <button
+                onClick={() => {
+                  patchTodoMutation.mutate({
+                    id: data.id,
+                    isDone: false,
+                    title,
+                    content,
+                  });
+                }}
+              >
+                변화
+              </button>
             </div>
           ))}
       </section>

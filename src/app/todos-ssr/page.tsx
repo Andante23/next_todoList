@@ -7,6 +7,7 @@ async function TodoSsrPage() {
   });
 
   const { todos } = await response.json();
+  console.log(todos);
 
   return (
     <>

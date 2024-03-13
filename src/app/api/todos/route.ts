@@ -32,7 +32,6 @@ export async function POST(request: Request) {
   });
 }
 
-// 데이터 수정하기
 export async function PATCH(request: Request) {
   const { isDone } = await request.json();
 
@@ -41,9 +40,10 @@ export async function PATCH(request: Request) {
 
   // 컴퓨터가 요청 URL을 찾아요 그리고 거기에서 id를 얻어옴
   const id = url.searchParams.get("id");
+  console.log("id", id);
 
-  const response = await fetch(`https://localhost:4000/todos/${id}`, {
-    method: "PUT",
+  const response = await fetch(`http://localhost:4000/todos/${id}`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
@@ -51,11 +51,10 @@ export async function PATCH(request: Request) {
     body: JSON.stringify({ isDone: !isDone }),
   });
 
-  const todo = await response.json();
+  const data = await response.json();
 
-  return Response.json({
-    todo,
-  });
+  // console.log(request);
+  return Response.json(data);
 }
 
 // 데이터 삭제하기
@@ -72,7 +71,7 @@ export async function DELETE(request: Request) {
 
   if (response.ok) {
     return Response.json({
-      message: "Todo deleted successfully",
+      message: "Todo change successfully",
     });
   } else {
     return new Response("Failed to delete Todo", {
