@@ -38,6 +38,8 @@ function useForm() {
         }
       );
     } else {
+      setContent("");
+      setTitle("");
       window.alert("추가할수 없습니다.");
     }
   };

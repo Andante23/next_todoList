@@ -1,9 +1,13 @@
+import Link from "next/link";
 import { Todos } from "../types/todo";
 
 async function TodoSsrPage() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_TODO_URL}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_TODO_URL}`, {
+    cache: "no-cache",
+  });
 
-  const { todos } = await response.json();
+  const todos = await response.json();
+  console.log(todos);
 
   return (
     <>
@@ -13,6 +17,8 @@ async function TodoSsrPage() {
           <p>{data.content}</p>
         </div>
       ))}
+
+      <Link href={"/report"}>통계페이지로</Link>
     </>
   );
 }
